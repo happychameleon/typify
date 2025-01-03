@@ -1577,6 +1577,7 @@ impl TypeSpace {
                     .try_for_each(|value| type_entry.validate_value(self, value).map(|_| ()))?;
 
                 let enum_values: Vec<serde_json::Value> = enum_values
+                    .into_iter()
                     .filter(|value| {
                         if let Err(_) = type_entry.validate_value(&self, &value) {
                             println!("filter value {value:#?}");
