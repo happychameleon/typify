@@ -1576,6 +1576,17 @@ impl TypeSpace {
                     .iter()
                     .try_for_each(|value| type_entry.validate_value(self, value).map(|_| ()))?;
 
+                let enum_values: Vec<serde_json::Value> = enum_values
+                    .filter(|value| {
+                        if let Err(_) = type_entry.validate_value(&self, &value) {
+                            println!("filter value {value:#?}");
+                            return false;
+                        }
+                        true
+                    })
+                    .cloned()
+                    .collect();
+
                 let type_id = self.assign_type(type_entry);
 
                 let newtype_entry = TypeEntryNewtype::from_metadata_with_deny_values(
@@ -1583,7 +1594,7 @@ impl TypeSpace {
                     type_name,
                     metadata,
                     type_id,
-                    enum_values,
+                    enum_values.as_slice(),
                     original_schema.clone(),
                 );
 

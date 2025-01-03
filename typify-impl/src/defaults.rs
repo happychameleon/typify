@@ -315,7 +315,7 @@ impl TypeEntry {
                 }
             }
 
-            TypeEntryDetails::Reference(_) => unreachable!(),
+            TypeEntryDetails::Reference(_) => Err(Error::invalid_value()),
         }
     }
 
